@@ -24,8 +24,9 @@ You will need to install this manually:
 
 1. Unzip the archive and put the 'contact-form-7-google-places-api' folder into your plugins folder (/wp-content/plugins/).
 2. Open the 'contact-form-7-google-places-api.php' file in a code editor and follow the instructions to place your API key from Google on line 40.
-2. Activate the plugin from the Plugins menu.
-3. Go to Contact->Add New and you can now create a form with the 'Places Text Field' tag type.
+3. Activate the plugin from the Plugins menu.
+4. Go to Contact->Add New and you can now create a form with the 'Places Text Field' tag type.
+5. When using the 'Places Text Field' tag type — In the 'Form-tag Generator: Places Text Field' you must enter "autocomplete" without quotes as the value for the 'Id attribute' field.
 
 == Frequently Asked Questions ==
 
