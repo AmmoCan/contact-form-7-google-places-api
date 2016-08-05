@@ -33,8 +33,8 @@ License: GPL3
 * Loads scripts
 */
 function gpa_load_scripts() {
-  // If you are not placing your contact form on the front-page, then you will need to target that page instead, so you aren't loading the script on every page.
-	if( is_front_page() ) {
+  // Below inside the single quotes replace Home with the title of the page you are placing it in if it isn't the front-page. For example: Contact
+	if( is_page( 'Home' ) ) {
   	// You will need to get your own API key from Google at: https://developers.google.com/maps/documentation/javascript/get-api-key
   	// Once you have your key enter it below in place of: 'ENTER YOUR API KEY HERE'
 	  wp_enqueue_script( 'gpa-google-places-api', '//maps.googleapis.com/maps/api/js?key='ENTER YOUR API KEY HERE'&libraries=places', array(), 'null', true );
@@ -44,8 +44,8 @@ function gpa_load_scripts() {
 add_action( 'wp_enqueue_scripts', 'gpa_load_scripts' );
 
 function gpa_plugin_script() {
-  // If you are not placing your contact form on the front-page, then you will need to target that page instead, so you aren't loading the script on every page.
-  if( is_front_page() ) { ?>
+  // Below inside the single quotes replace Home with the title of the page you are placing it in if it isn't the front-page. For example: Contact
+  if( is_page( 'Home' ) ) { ?>
     <script>
       window.onload = function initialize_gpa() {
       // Create the autocomplete object and associate it with the UI input control.
