@@ -23,10 +23,11 @@ This plugin adds a new tag type for the Contact Form 7 plugin. This new tag type
 You will need to install this manually:
 
 1. Unzip the archive and put the 'contact-form-7-google-places-api' folder into your plugins folder (/wp-content/plugins/).
-2. Open the 'contact-form-7-google-places-api.php' file in a code editor and follow the instructions to place your API key from Google on line 40. Basically, you will need to replace the: 'ENTER YOUR API KEY HERE' string, single quotes too, with your API key.
-3. Activate the plugin from the Plugins menu.
-4. Go to Contact->Add New and you can now create a form with the 'Places Text Field' tag type.
-5. When using the 'Places Text Field' tag type — In the 'Form-tag Generator: Places Text Field' you must enter "autocomplete" without quotes as the value for the 'Id attribute' field.
+2. Open the 'contact-form-7-google-places-api.php' file in a code editor and follow the instructions on lines 36 and 47, in order to have the scripts load on just the page you will be placing your form with the 'Places Text Field' tag type in.
+3. In the same file, follow the instructions on line 38 to place your API key from Google on line 40. Basically, you will need to replace the: 'ENTER YOUR API KEY HERE' string, single quotes too, with your API key.
+4. Activate the plugin from the Plugins menu.
+5. Go to Contact->Add New and you can now create a form with the 'Places Text Field' tag type.
+6. When using the 'Places Text Field' tag type — In the 'Form-tag Generator: Places Text Field' you must enter "autocomplete" without quotes as the value for the 'Id attribute' field.
 
 == Frequently Asked Questions ==
 
