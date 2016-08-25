@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Contact Form 7 - Google Places API
-Plugin URI: http://www.2-Drops.com
+Plugin URI: https://github.com/AmmoCan/contact-form-7-google-places-api
 Description: Based on a plugin by Pasquale Bucci, that wasn't working and only autocompletes a user's input of a city. This plugin provides a text input field for an autocomplete places search, based on the Google Places API. The Contact Form 7 plugin and a Google API key is required.
 Version: 1.0
 Author: AmmoCan
