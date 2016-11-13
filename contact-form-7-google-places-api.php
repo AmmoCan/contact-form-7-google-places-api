@@ -1,51 +1,112 @@
 <?php
-
 /*
 Plugin Name: Contact Form 7 - Google Places API
 Plugin URI: https://github.com/AmmoCan/contact-form-7-google-places-api
 Description: Based on a plugin by Pasquale Bucci, that wasn't working and only autocompletes a user's input of a city. This plugin provides a text input field for an autocomplete places search, based on the Google Places API. The Contact Form 7 plugin and a Google API key is required.
-Version: 1.0
+Version: 1.1
 Author: AmmoCan
-Author URI: http://www.linkedin.com/in/ammocan
-License: GPL3
+Author URI: https://www.linkedin.com/in/ammocan
+License: GPLv3 or later
 */
 
-/*  Copyright 2015 Two Drops (email : ammo@2-Drops.com)
+/* Copyright 2015 Two Drops (email : ammo@2-Drops.com)
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 3, as 
-    published by the Free Software Foundation.
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License, version 3, as 
+   published by the Free Software Foundation.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-    GNU General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this plugin; if not, write to the following:
-    
-    Free Software Foundation, Inc.,
-    51 Franklin St, Fifth Floor,
-    Boston, MA 02110-1301 USA
+   You should have received a copy of the GNU General Public License
+   along with this plugin; if not, write to the following:
+
+   Free Software Foundation, Inc.,
+   51 Franklin St, Fifth Floor,
+   Boston, MA 02110-1301 USA
 */
+
+//do not allow direct access
+defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+
+/*
+* Set up Settings page
+*/
+function gpa_settings_page() {
+?>
+  <div class="wrap">
+    <h1>Google Places API Info.</h1>
+    <form method="post" action="options.php">
+      <?php
+        settings_fields('section');
+        do_settings_sections('gpa-options');      
+        submit_button(); 
+      ?>          
+    </form>
+  </div>
+<?php
+}
+
+function add_gpa_menu_item() {
+  
+	add_menu_page(
+	  'Google Places API',
+	  'Google Places API',
+	  'manage_options',
+	  'gpa',
+	  'gpa_settings_page',
+	  null,
+	  99
+  );
+	
+}
+add_action('admin_menu', 'add_gpa_menu_item');
+
+function display_gpa_page_element() {
+	?>
+    <input type="text" name="gpa_page" id="gpa_page" value="<?php echo get_option('gpa_page')?>" />
+  <?php
+}
+
+function display_api_key_element() {
+	?>
+    <input type="password" name="api_key" id="api_key" value="<?php echo get_option('api_key')?>" />
+  <?php
+}
+
+function display_gpa_fields() {
+	add_settings_section('section', 'All Settings', null, 'gpa-options');
+	
+	add_settings_field('gpa_page', 'What Page Will I Be On?', 'display_gpa_page_element', 'gpa-options', 'section');
+  add_settings_field('api_key', 'Google Places API Key', 'display_api_key_element', 'gpa-options', 'section');
+  
+  register_setting('section', 'gpa_page');
+  register_setting('section', 'api_key');
+}
+add_action('admin_init', 'display_gpa_fields');
 
 /*
 * Loads scripts
 */
-function gpa_load_scripts() {
-  // Below inside the single quotes replace Home with the title of the page you are placing it in if it isn't the front-page. For example: Contact
-	if( is_page( 'Home' ) ) {
+function gpa_load_user_api() {
+  $gpa_page = get_option( 'gpa_page' );
+  $api_key = get_option( 'api_key' );
+  $api_script .= '//maps.googleapis.com/maps/api/js?key=' . $api_key . '&libraries=places';
+  // Below we are making sure the script is only loaded on the page designated in the Google Places API settings page (i.e. Contact, Home, etc.).
+	if( is_page( $gpa_page ) ) {
   	// You will need to get your own API key from Google at: https://developers.google.com/maps/documentation/javascript/get-api-key
-  	// Once you have your key enter it below in place of: 'ENTER YOUR API KEY HERE'
-	  wp_enqueue_script( 'gpa-google-places-api', '//maps.googleapis.com/maps/api/js?key='ENTER YOUR API KEY HERE'&libraries=places', array(), 'null', true );
+  	// Once you have your key enter it in the Google Places API Key field on the Google Places API settings page.
+	  wp_enqueue_script( 'gpa-google-places-api', $api_script, array(), 'null', true );
 	}
-	
 }
-add_action( 'wp_enqueue_scripts', 'gpa_load_scripts' );
+add_action( 'wp_enqueue_scripts', 'gpa_load_user_api' );
 
 function gpa_plugin_script() {
-  // Below inside the single quotes replace Home with the title of the page you are placing it in if it isn't the front-page. For example: Contact
-  if( is_page( 'Home' ) ) { ?>
+  $gpa_page = get_option( 'gpa_page' );
+  // Below we are making sure the script is only loaded on the page designated in the Google Places API settings page (i.e. Contact, Home, etc.).
+  if( is_page( $gpa_page ) ) { ?>
     <script>
       window.onload = function initialize_gpa() {
       // Create the autocomplete object and associate it with the UI input control.
@@ -62,7 +123,6 @@ function gpa_plugin_script() {
       }
     </script>
   <?php }
-
 }
 add_action( 'wp_footer', 'gpa_plugin_script', 21, 1 );
 
