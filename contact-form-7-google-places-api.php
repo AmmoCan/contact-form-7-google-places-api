@@ -221,17 +221,19 @@ function wpcf7_placesfieldtext_shortcode_handler( $tag ) {
 */
 function wpcf7_placesfieldtext_validation_filter( $result, $tag ) {
 	
-	$wpcf7_contact_form = WPCF7_ContactForm::get_current();
+	$tag = new WPCF7_FormTag( $tag );
 
-	$type = $tag['type'];
-	$name = $tag['name'];
+	$name = $tag->name;
 
-	$_POST[$name] = trim( strtr( (string) $_POST[$name], "\n", " " ) );
+	$value = isset( $_POST[$name] )
+		? trim( wp_unslash( strtr( (string) $_POST[$name], "\n", " " ) ) )
+		: '';
+		
+  $message = wpcf7_get_message( 'invalid_required' );
 
-	if ( 'placesfieldtext*' == $type ) {
-		if ( '' == $_POST[$name] ) {
-			$result['valid'] = false;
-			$result['reason'][$name] = $wpcf7_contact_form->message( 'invalid_required' );
+	if ( 'placesfieldtext' == $tag->basetype ) {
+		if ( $tag->is_required() && '' == $value ) {
+			$result->invalidate( $tag, $message );
 		}
 	}
 
